@@ -62,15 +62,25 @@ public class GameBetter implements IGame {
    }
 
    private void handleRollForPlayerInPenaltyBox(int roll) {
-      if (roll % 2 != 0) {
-         isGettingOutOfPenaltyBox = true;
+      isGettingOutOfPenaltyBox = (roll % 2 != 0);
 
-         System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
+      printPenaltyBoxInteractionMessage(isGettingOutOfPenaltyBox);
+
+      if (isGettingOutOfPenaltyBox) {
          handleRollForPlayerWithoutPenalty(roll);
-      } else {
-         System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
-         isGettingOutOfPenaltyBox = false;
       }
+   }
+   
+   private void printPenaltyBoxInteractionMessage(boolean isGettingOutOfPenaltyBox) {
+      String interactionType = createMessageForInteractionType(isGettingOutOfPenaltyBox);
+      System.out.println(players.get(currentPlayer) + interactionType + " of the penalty box");
+   }
+
+   private String createMessageForInteractionType(boolean isGettingOutOfPenaltyBox) {
+      if (isGettingOutOfPenaltyBox) {
+         return " is getting out";
+      }
+      return " is not getting out";
    }
 
    private void handleRollForPlayerWithoutPenalty(int roll) {
