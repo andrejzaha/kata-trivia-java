@@ -54,7 +54,7 @@ public class GameBetter implements IGame {
    }
 
    public void roll(int roll) {
-      System.out.println(players.get(currentPlayer) + " is the current player");
+      System.out.println(getCurrentPlayerName() + " is the current player");
       System.out.println("They have rolled a " + roll);
 
       if (inPenaltyBox[currentPlayer]) {
@@ -73,10 +73,10 @@ public class GameBetter implements IGame {
          handleRollForPlayerWithoutPenalty(roll);
       }
    }
-   
+
    private void printPenaltyBoxInteractionMessage(boolean isGettingOutOfPenaltyBox) {
       String interactionType = createMessageForInteractionType(isGettingOutOfPenaltyBox);
-      System.out.println(players.get(currentPlayer) + interactionType + " of the penalty box");
+      System.out.println(getCurrentPlayerName() + interactionType + " of the penalty box");
    }
 
    private String createMessageForInteractionType(boolean isGettingOutOfPenaltyBox) {
@@ -96,7 +96,7 @@ public class GameBetter implements IGame {
       places[currentPlayer] += roll;
       if (places[currentPlayer] > 11) places[currentPlayer] -= 12;
 
-      System.out.println(players.get(currentPlayer)
+      System.out.println(getCurrentPlayerName()
                          + "'s new location is "
                          + places[currentPlayer]);
    }
@@ -149,7 +149,7 @@ public class GameBetter implements IGame {
    private void handleCurrentPlayerCorrectAnswer() {
       System.out.println("Answer was correct!!!!");
       purses[currentPlayer]++;
-      System.out.println(players.get(currentPlayer)
+      System.out.println(getCurrentPlayerName()
                          + " now has "
                          + purses[currentPlayer]
                          + " Gold Coins.");
@@ -170,8 +170,12 @@ public class GameBetter implements IGame {
    }
 
    private void sendCurrentPlayerToPenaltyBox() {
-      System.out.println(players.get(currentPlayer) + " was sent to the penalty box");
+      System.out.println(getCurrentPlayerName() + " was sent to the penalty box");
       inPenaltyBox[currentPlayer] = true;
+   }
+
+   private String getCurrentPlayerName() {
+      return (String) players.get(currentPlayer);
    }
 
    private void selectNextPlayer() {
