@@ -124,11 +124,11 @@ public class GameBetter implements IGame {
          if (isGettingOutOfPenaltyBox) {
             handleCurrentPlayerCorrectAnswer();
 
-            boolean winner = didPlayerWin();
+            boolean shouldGameContinue = isCurrentPlayerNotAWinner();
 
             selectNextPlayer();
 
-            return winner;
+            return shouldGameContinue;
          } else {
             selectNextPlayer();
 
@@ -137,12 +137,16 @@ public class GameBetter implements IGame {
       } else {
          handleCurrentPlayerCorrectAnswer();
 
-         boolean winner = didPlayerWin();
+         boolean winner = isCurrentPlayerNotAWinner();
 
          selectNextPlayer();
 
          return winner;
       }
+   }
+
+   private boolean isCurrentPlayerNotAWinner() {
+      return purses[currentPlayer] != 6;
    }
 
    private void handleCurrentPlayerCorrectAnswer() {
@@ -178,8 +182,4 @@ public class GameBetter implements IGame {
       if (currentPlayer == players.size()) currentPlayer = 0;
    }
 
-
-   private boolean didPlayerWin() {
-      return !(purses[currentPlayer] == 6);
-   }
 }
