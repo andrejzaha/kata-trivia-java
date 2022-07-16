@@ -130,13 +130,11 @@ public class GameBetter implements IGame {
                                + " Gold Coins.");
 
             boolean winner = didPlayerWin();
-            currentPlayer++;
-            if (currentPlayer == players.size()) currentPlayer = 0;
+            selectNextPlayer();
 
             return winner;
          } else {
-            currentPlayer++;
-            if (currentPlayer == players.size()) currentPlayer = 0;
+            selectNextPlayer();
             return true;
          }
 
@@ -151,21 +149,34 @@ public class GameBetter implements IGame {
                             + " Gold Coins.");
 
          boolean winner = didPlayerWin();
-         currentPlayer++;
-         if (currentPlayer == players.size()) currentPlayer = 0;
+         selectNextPlayer();
 
          return winner;
       }
    }
 
    public boolean wrongAnswer() {
+      handleCurrentPlayerWrongAnswer();
+
+      return true;
+   }
+
+   private void handleCurrentPlayerWrongAnswer() {
       System.out.println("Question was incorrectly answered");
+
+      sendCurrentPlayerToPenaltyBox();
+
+      selectNextPlayer();
+   }
+
+   private void sendCurrentPlayerToPenaltyBox() {
       System.out.println(players.get(currentPlayer) + " was sent to the penalty box");
       inPenaltyBox[currentPlayer] = true;
+   }
 
+   private void selectNextPlayer() {
       currentPlayer++;
       if (currentPlayer == players.size()) currentPlayer = 0;
-      return true;
    }
 
 
