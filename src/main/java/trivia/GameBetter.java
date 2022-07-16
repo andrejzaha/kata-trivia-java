@@ -7,8 +7,6 @@ import java.util.List;
 // REFACTOR ME
 public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
-   private boolean[] inPenaltyBox = new boolean[6];
-
    private LinkedList popQuestions = new LinkedList();
    private LinkedList scienceQuestions = new LinkedList();
    private LinkedList sportsQuestions = new LinkedList();
@@ -36,14 +34,9 @@ public class GameBetter implements IGame {
 
    public boolean add(String playerName) {
       players.add(new Player(playerName));
-      initializeAddedPlayer();
       System.out.println(playerName + " was added");
       System.out.println("They are player number " + players.size());
       return true;
-   }
-
-   private void initializeAddedPlayer() {
-      inPenaltyBox[howManyPlayers()] = false;
    }
 
    private int howManyPlayers() {
@@ -54,7 +47,7 @@ public class GameBetter implements IGame {
       System.out.println(getCurrentPlayer().getName() + " is the current player");
       System.out.println("They have rolled a " + roll);
 
-      if (inPenaltyBox[currentPlayer]) {
+      if (getCurrentPlayer().isInPenaltyBox()) {
          handleRollForPlayerInPenaltyBox(roll);
       } else {
          handleRollForPlayerWithoutPenalty(roll);
@@ -123,7 +116,7 @@ public class GameBetter implements IGame {
    }
 
    public boolean wasCorrectlyAnswered() {
-      if (!inPenaltyBox[currentPlayer] || isGettingOutOfPenaltyBox) {
+      if (!getCurrentPlayer().isInPenaltyBox() || isGettingOutOfPenaltyBox) {
          handleCurrentPlayerCorrectAnswer();
       }
       boolean shouldGameContinue = shouldGameContinue();
@@ -132,7 +125,7 @@ public class GameBetter implements IGame {
    }
 
    private boolean shouldGameContinue() {
-      if (inPenaltyBox[currentPlayer] && !isGettingOutOfPenaltyBox) {
+      if (getCurrentPlayer().isInPenaltyBox() && !isGettingOutOfPenaltyBox) {
          return true;
       }
       return isCurrentPlayerNotAWinner();
@@ -167,7 +160,7 @@ public class GameBetter implements IGame {
 
    private void sendCurrentPlayerToPenaltyBox() {
       System.out.println(getCurrentPlayer().getName() + " was sent to the penalty box");
-      inPenaltyBox[currentPlayer] = true;
+      getCurrentPlayer().moveToPenaltyBox();
    }
 
    private Player getCurrentPlayer() {

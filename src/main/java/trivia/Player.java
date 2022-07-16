@@ -5,6 +5,7 @@ public class Player {
     private final String name;
     private int place;
     private int purse;
+    private boolean inPenaltyBox;
 
     public Player(String name) {
         this.name = name;
@@ -32,5 +33,13 @@ public class Player {
 
     public void incrementPurse() {
         purse++;
+    }
+
+    public boolean isInPenaltyBox() {
+        return inPenaltyBox;
+    }
+
+    public void moveToPenaltyBox() {
+        inPenaltyBox = true;
     }
 }
