@@ -6,8 +6,7 @@ import java.util.List;
 
 // REFACTOR ME
 public class GameBetter implements IGame {
-   private List<Player> players = new ArrayList<>();
-   private int[] places = new int[6];
+   private final List<Player> players = new ArrayList<>();
    private int[] purses = new int[6];
    private boolean[] inPenaltyBox = new boolean[6];
 
@@ -45,7 +44,6 @@ public class GameBetter implements IGame {
    }
 
    private void initializeAddedPlayer() {
-      places[howManyPlayers()] = 0;
       purses[howManyPlayers()] = 0;
       inPenaltyBox[howManyPlayers()] = false;
    }
@@ -55,7 +53,7 @@ public class GameBetter implements IGame {
    }
 
    public void roll(int roll) {
-      System.out.println(getCurrentPlayerName() + " is the current player");
+      System.out.println(getCurrentPlayer().getName() + " is the current player");
       System.out.println("They have rolled a " + roll);
 
       if (inPenaltyBox[currentPlayer]) {
@@ -77,7 +75,7 @@ public class GameBetter implements IGame {
 
    private void printPenaltyBoxInteractionMessage(boolean isGettingOutOfPenaltyBox) {
       String interactionType = createMessageForInteractionType(isGettingOutOfPenaltyBox);
-      System.out.println(getCurrentPlayerName() + interactionType + " of the penalty box");
+      System.out.println(getCurrentPlayer().getName() + interactionType + " of the penalty box");
    }
 
    private String createMessageForInteractionType(boolean isGettingOutOfPenaltyBox) {
@@ -94,12 +92,11 @@ public class GameBetter implements IGame {
    }
 
    private void updateCurrentPlayerPlace(int roll) {
-      places[currentPlayer] += roll;
-      if (places[currentPlayer] > 11) places[currentPlayer] -= 12;
+      getCurrentPlayer().updatePlaceByRoll(roll, 12);
 
-      System.out.println(getCurrentPlayerName()
+      System.out.println(getCurrentPlayer().getName()
                          + "'s new location is "
-                         + places[currentPlayer]);
+                         + getCurrentPlayer().getPlace());
    }
 
    private void askQuestion() {
@@ -115,15 +112,15 @@ public class GameBetter implements IGame {
 
 
    private String currentCategory() {
-      if (places[currentPlayer] == 0) return "Pop";
-      if (places[currentPlayer] == 4) return "Pop";
-      if (places[currentPlayer] == 8) return "Pop";
-      if (places[currentPlayer] == 1) return "Science";
-      if (places[currentPlayer] == 5) return "Science";
-      if (places[currentPlayer] == 9) return "Science";
-      if (places[currentPlayer] == 2) return "Sports";
-      if (places[currentPlayer] == 6) return "Sports";
-      if (places[currentPlayer] == 10) return "Sports";
+      if (getCurrentPlayer().getPlace() == 0) return "Pop";
+      if (getCurrentPlayer().getPlace() == 4) return "Pop";
+      if (getCurrentPlayer().getPlace() == 8) return "Pop";
+      if (getCurrentPlayer().getPlace() == 1) return "Science";
+      if (getCurrentPlayer().getPlace() == 5) return "Science";
+      if (getCurrentPlayer().getPlace() == 9) return "Science";
+      if (getCurrentPlayer().getPlace() == 2) return "Sports";
+      if (getCurrentPlayer().getPlace() == 6) return "Sports";
+      if (getCurrentPlayer().getPlace() == 10) return "Sports";
       return "Rock";
    }
 
@@ -150,7 +147,7 @@ public class GameBetter implements IGame {
    private void handleCurrentPlayerCorrectAnswer() {
       System.out.println("Answer was correct!!!!");
       purses[currentPlayer]++;
-      System.out.println(getCurrentPlayerName()
+      System.out.println(getCurrentPlayer().getName()
                          + " now has "
                          + purses[currentPlayer]
                          + " Gold Coins.");
@@ -171,12 +168,12 @@ public class GameBetter implements IGame {
    }
 
    private void sendCurrentPlayerToPenaltyBox() {
-      System.out.println(getCurrentPlayerName() + " was sent to the penalty box");
+      System.out.println(getCurrentPlayer().getName() + " was sent to the penalty box");
       inPenaltyBox[currentPlayer] = true;
    }
 
-   private String getCurrentPlayerName() {
-      return players.get(currentPlayer).getName();
+   private Player getCurrentPlayer() {
+      return players.get(currentPlayer);
    }
 
    private void selectNextPlayer() {
