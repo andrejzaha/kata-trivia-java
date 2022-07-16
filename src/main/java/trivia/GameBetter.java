@@ -120,29 +120,19 @@ public class GameBetter implements IGame {
    }
 
    public boolean wasCorrectlyAnswered() {
-      if (inPenaltyBox[currentPlayer]) {
-         if (isGettingOutOfPenaltyBox) {
-            handleCurrentPlayerCorrectAnswer();
-
-            boolean shouldGameContinue = isCurrentPlayerNotAWinner();
-
-            selectNextPlayer();
-
-            return shouldGameContinue;
-         } else {
-            selectNextPlayer();
-
-            return true;
-         }
-      } else {
+      if (!inPenaltyBox[currentPlayer] || isGettingOutOfPenaltyBox) {
          handleCurrentPlayerCorrectAnswer();
-
-         boolean winner = isCurrentPlayerNotAWinner();
-
-         selectNextPlayer();
-
-         return winner;
       }
+      boolean shouldGameContinue = shouldGameContinue();
+      selectNextPlayer();
+      return shouldGameContinue;
+   }
+
+   private boolean shouldGameContinue() {
+      if (inPenaltyBox[currentPlayer] && !isGettingOutOfPenaltyBox) {
+         return true;
+      }
+      return isCurrentPlayerNotAWinner();
    }
 
    private boolean isCurrentPlayerNotAWinner() {
