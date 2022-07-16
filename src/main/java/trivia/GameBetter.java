@@ -2,10 +2,11 @@ package trivia;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 // REFACTOR ME
 public class GameBetter implements IGame {
-   private ArrayList players = new ArrayList();
+   private List<Player> players = new ArrayList<>();
    private int[] places = new int[6];
    private int[] purses = new int[6];
    private boolean[] inPenaltyBox = new boolean[6];
@@ -36,7 +37,7 @@ public class GameBetter implements IGame {
    }
 
    public boolean add(String playerName) {
-      players.add(playerName);
+      players.add(new Player(playerName));
       initializeAddedPlayer();
       System.out.println(playerName + " was added");
       System.out.println("They are player number " + players.size());
@@ -175,7 +176,7 @@ public class GameBetter implements IGame {
    }
 
    private String getCurrentPlayerName() {
-      return (String) players.get(currentPlayer);
+      return players.get(currentPlayer).getName();
    }
 
    private void selectNextPlayer() {
