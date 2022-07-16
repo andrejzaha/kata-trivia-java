@@ -4,14 +4,18 @@ public class Player {
 
     private final String name;
     private int place;
+    private int purse;
 
     public Player(String name) {
         this.name = name;
-        this.place = 0;
     }
 
     public String getName() {
         return name;
+    }
+
+    public int getPlace() {
+        return place;
     }
 
     public void updatePlaceByRoll(int roll, int maxNbOfPlaces) {
@@ -22,7 +26,11 @@ public class Player {
         place = placeAfterRoll;
     }
 
-    public int getPlace() {
-        return place;
+    public int getPurse() {
+        return purse;
+    }
+
+    public void incrementPurse() {
+        purse++;
     }
 }

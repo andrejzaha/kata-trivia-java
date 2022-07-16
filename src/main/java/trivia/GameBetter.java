@@ -7,7 +7,6 @@ import java.util.List;
 // REFACTOR ME
 public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
-   private int[] purses = new int[6];
    private boolean[] inPenaltyBox = new boolean[6];
 
    private LinkedList popQuestions = new LinkedList();
@@ -44,7 +43,6 @@ public class GameBetter implements IGame {
    }
 
    private void initializeAddedPlayer() {
-      purses[howManyPlayers()] = 0;
       inPenaltyBox[howManyPlayers()] = false;
    }
 
@@ -141,15 +139,15 @@ public class GameBetter implements IGame {
    }
 
    private boolean isCurrentPlayerNotAWinner() {
-      return purses[currentPlayer] != 6;
+      return getCurrentPlayer().getPurse() != 6;
    }
 
    private void handleCurrentPlayerCorrectAnswer() {
       System.out.println("Answer was correct!!!!");
-      purses[currentPlayer]++;
+      getCurrentPlayer().incrementPurse();
       System.out.println(getCurrentPlayer().getName()
                          + " now has "
-                         + purses[currentPlayer]
+                         + getCurrentPlayer().getPurse()
                          + " Gold Coins.");
    }
 
