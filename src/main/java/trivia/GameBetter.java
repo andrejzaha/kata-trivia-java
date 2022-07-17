@@ -8,6 +8,7 @@ public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
    private final PenaltyBox penaltyBox = new PenaltyBox();
    private final GameReferee gameReferee = new GameReferee();
+   private final Printer printer = new Printer();
    private int currentPlayer;
 
    public GameBetter() {
@@ -17,8 +18,7 @@ public class GameBetter implements IGame {
 
    public boolean add(String playerName) {
       players.add(new Player(playerName));
-      System.out.println(playerName + " was added");
-      System.out.println("They are player number " + players.size());
+      printer.printAfterAddingPlayer(players);
       return true;
    }
 
@@ -31,8 +31,7 @@ public class GameBetter implements IGame {
    }
 
    public void roll(int roll) {
-      System.out.println(getCurrentPlayer().getName() + " is the current player");
-      System.out.println("They have rolled a " + roll);
+      printer.printAfterRoll(getCurrentPlayer(), roll);
 
       if (penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer())) {
          handleRollForPlayerInPenaltyBox(roll);
@@ -44,7 +43,7 @@ public class GameBetter implements IGame {
    private void handleRollForPlayerInPenaltyBox(int roll) {
       boolean isGettingOutOfPenaltyBox = gameReferee.isGettingOutOfPenaltyBox(roll);
 
-      printPenaltyBoxInteractionMessage(isGettingOutOfPenaltyBox);
+      printer.printPenaltyBoxInteractionMessage(getCurrentPlayer(), isGettingOutOfPenaltyBox);
 
       if (isGettingOutOfPenaltyBox) {
          penaltyBox.releasePrisoner(getCurrentPlayer());
@@ -52,36 +51,23 @@ public class GameBetter implements IGame {
       }
    }
 
-   private void printPenaltyBoxInteractionMessage(boolean isGettingOutOfPenaltyBox) {
-      String interactionType = createMessageForInteractionType(isGettingOutOfPenaltyBox);
-      System.out.println(getCurrentPlayer().getName() + interactionType + " of the penalty box");
-   }
-
-   private String createMessageForInteractionType(boolean isGettingOutOfPenaltyBox) {
-      if (isGettingOutOfPenaltyBox) {
-         return " is getting out";
-      }
-      return " is not getting out";
-   }
-
    private void handleRollForPlayerWithoutPenalty(int roll) {
-      gameBoard.movePlayer(getCurrentPlayer(), roll);
-      System.out.println(getCurrentPlayer().getName() + "'s new location is " + getCurrentPlayer().getPlace().getIndex());
+      Player currentPlayer = getCurrentPlayer();
 
-      Category currentCategory = getCurrentPlayer().getPlace().getCategory();
-
-      System.out.println("The category is " + currentCategory.getName());
-      System.out.println(currentCategory.consumeQuestion());
+      gameBoard.movePlayer(currentPlayer, roll);
+      printer.printPlayerNewLocation(currentPlayer);
+      printer.printQuestion(currentPlayer);
    }
 
    public boolean wasCorrectlyAnswered() {
-      if (!penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer())) {
-         System.out.println("Answer was correct!!!!");
-         getCurrentPlayer().incrementPurse();
-         System.out.println(getCurrentPlayer().getName() + " now has " + getCurrentPlayer().getPurse() + " Gold Coins.");
+      Player currentPlayer = getCurrentPlayer();
+
+      if (!penaltyBox.isGivenPlayerPrisoner(currentPlayer)) {
+         currentPlayer.incrementPurse();
+         printer.printForCorrectAnswer(currentPlayer);
       }
 
-      boolean shouldGameContinue = shouldGameContinue();
+      boolean shouldGameContinue = shouldGameContinue(currentPlayer);
       if (!shouldGameContinue) {
          return false;
       }
@@ -91,19 +77,18 @@ public class GameBetter implements IGame {
       return true;
    }
 
-   private boolean shouldGameContinue() {
-      if (penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer())) {
+   private boolean shouldGameContinue(Player currentPlayer) {
+      if (penaltyBox.isGivenPlayerPrisoner(currentPlayer)) {
          return true;
       }
-      return !gameReferee.isPlayerTheWinner(getCurrentPlayer());
+      return !gameReferee.isPlayerTheWinner(currentPlayer);
    }
 
    public boolean wrongAnswer() {
-      System.out.println("Question was incorrectly answered");
+      Player currentPlayer = getCurrentPlayer();
 
-      penaltyBox.addPrisoner(getCurrentPlayer());
-      System.out.println(getCurrentPlayer().getName() + " was sent to the penalty box");
-
+      penaltyBox.addPrisoner(currentPlayer);
+      printer.printForIncorrectAnswer(currentPlayer);
       selectNextPlayer();
 
       return true;

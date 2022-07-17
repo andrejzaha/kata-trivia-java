@@ -12,10 +12,6 @@ public class Player {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public Place getPlace() {
         return place;
     }
@@ -43,5 +39,10 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
