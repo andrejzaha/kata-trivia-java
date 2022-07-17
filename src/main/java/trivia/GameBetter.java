@@ -2,27 +2,18 @@ package trivia;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 // REFACTOR ME
 public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
    private final PenaltyBox penaltyBox = new PenaltyBox();
-   private final Set<Category> categories;
+   private final GameBoard gameBoard;
 
    private int currentPlayer = 0;
 
    public GameBetter() {
       List<String> categoryNames = Arrays.asList("Pop", "Science", "Sports", "Rock");
-      categories = categoryNames.stream()
-              .map(categoryName -> new Category(categoryName, createCategoryQuestions(categoryName)))
-              .collect(Collectors.toSet());
-   }
-
-   private Deque<String> createCategoryQuestions(String name) {
-      return IntStream.range(0, 50)
-              .mapToObj(index -> name + " Question " + index)
-              .collect(Collectors.toCollection(LinkedList::new));
+      gameBoard = new GameBoard(categoryNames);
    }
 
    public boolean isPlayable() {
@@ -89,9 +80,7 @@ public class GameBetter implements IGame {
    }
 
    private void askQuestion() {
-      Optional<Category> maybeCurrentCategory = categories.stream()
-              .filter(category -> category.getName().equals(currentCategory()))
-              .findFirst();
+      Optional<Category> maybeCurrentCategory = gameBoard.getCategoryByName(currentCategory());
 
       if (maybeCurrentCategory.isEmpty()) {
          return;
@@ -100,7 +89,6 @@ public class GameBetter implements IGame {
       Category currentCategory = maybeCurrentCategory.get();
       System.out.println(currentCategory.consumeQuestion());
    }
-
 
    private String currentCategory() {
       if (getCurrentPlayer().getPlace() == 0) return "Pop";

@@ -1,0 +1,27 @@
+package trivia;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class GameBoard {
+    private final Set<Category> categories;
+
+    public GameBoard(List<String> categoryNames) {
+        categories = categoryNames.stream()
+                .map(categoryName -> new Category(categoryName, createCategoryQuestions(categoryName)))
+                .collect(Collectors.toSet());
+    }
+
+    private Deque<String> createCategoryQuestions(String name) {
+       return IntStream.range(0, 50)
+               .mapToObj(index -> name + " Question " + index)
+               .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    public Optional<Category> getCategoryByName(String categoryName) {
+        return categories.stream()
+                .filter(category -> category.getName().equals(categoryName))
+                .findFirst();
+    }
+}
