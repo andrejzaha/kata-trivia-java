@@ -14,7 +14,6 @@ public class GameBetter implements IGame {
    private LinkedList rockQuestions = new LinkedList();
 
    private int currentPlayer = 0;
-   private boolean isGettingOutOfPenaltyBox;
 
    public GameBetter() {
       for (int i = 0; i < 50; i++) {
@@ -56,7 +55,7 @@ public class GameBetter implements IGame {
    }
 
    private void handleRollForPlayerInPenaltyBox(int roll) {
-      isGettingOutOfPenaltyBox = (roll % 2 != 0);
+      boolean isGettingOutOfPenaltyBox = (roll % 2 != 0);
 
       printPenaltyBoxInteractionMessage(isGettingOutOfPenaltyBox);
 
@@ -118,7 +117,7 @@ public class GameBetter implements IGame {
    }
 
    public boolean wasCorrectlyAnswered() {
-      if (!penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer()) || isGettingOutOfPenaltyBox) {
+      if (!penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer())) {
          handleCurrentPlayerCorrectAnswer();
       }
       boolean shouldGameContinue = shouldGameContinue();
@@ -127,7 +126,7 @@ public class GameBetter implements IGame {
    }
 
    private boolean shouldGameContinue() {
-      if (penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer()) && !isGettingOutOfPenaltyBox) {
+      if (penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer())) {
          return true;
       }
       return isCurrentPlayerNotAWinner();
