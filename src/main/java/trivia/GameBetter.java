@@ -67,12 +67,9 @@ public class GameBetter implements IGame {
    private void handleRollForPlayerWithoutPenalty(int roll) {
       updateCurrentPlayerPlace(roll);
 
-      Optional<Category> maybeCurrentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
-      if (maybeCurrentCategory.isEmpty()) {
-         return;
-      }
+      Category currentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
+      System.out.println("The category is " + currentCategory.getName());
 
-      System.out.println("The category is " + maybeCurrentCategory.get().getName());
       askQuestion();
    }
 
@@ -85,12 +82,8 @@ public class GameBetter implements IGame {
    }
 
    private void askQuestion() {
-      Optional<Category> maybeCurrentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
-      if (maybeCurrentCategory.isEmpty()) {
-         return;
-      }
-
-      System.out.println(maybeCurrentCategory.get().consumeQuestion());
+      Category currentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
+      System.out.println(currentCategory.consumeQuestion());
    }
 
    public boolean wasCorrectlyAnswered() {

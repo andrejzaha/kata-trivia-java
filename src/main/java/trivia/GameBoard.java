@@ -19,7 +19,7 @@ public class GameBoard {
                .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public Optional<Category> getCategoryByPlace(int place) {
+    public Category getCategoryByPlace(int place) {
         if (place == 0) return getCategoryByName("Pop");
         if (place == 4) return getCategoryByName("Pop");
         if (place == 8) return getCategoryByName("Pop");
@@ -32,9 +32,10 @@ public class GameBoard {
         return getCategoryByName("Rock");
     }
 
-    private Optional<Category> getCategoryByName(String categoryName) {
+    private Category getCategoryByName(String categoryName) {
         return categories.stream()
                 .filter(category -> category.getName().equals(categoryName))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Could not find category for categoryName=" + categoryName));
     }
 }
