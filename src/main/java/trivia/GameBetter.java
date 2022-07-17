@@ -7,6 +7,7 @@ public class GameBetter implements IGame {
    private final GameBoard gameBoard;
    private final List<Player> players = new ArrayList<>();
    private final PenaltyBox penaltyBox = new PenaltyBox();
+   private final GameReferee gameReferee = new GameReferee();
    private int currentPlayer;
 
    public GameBetter() {
@@ -41,7 +42,7 @@ public class GameBetter implements IGame {
    }
 
    private void handleRollForPlayerInPenaltyBox(int roll) {
-      boolean isGettingOutOfPenaltyBox = (roll % 2 != 0);
+      boolean isGettingOutOfPenaltyBox = gameReferee.isGettingOutOfPenaltyBox(roll);
 
       printPenaltyBoxInteractionMessage(isGettingOutOfPenaltyBox);
 
@@ -94,11 +95,7 @@ public class GameBetter implements IGame {
       if (penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer())) {
          return true;
       }
-      return isCurrentPlayerNotAWinner();
-   }
-
-   private boolean isCurrentPlayerNotAWinner() {
-      return getCurrentPlayer().getPurse() != 6;
+      return !gameReferee.isPlayerTheWinner(getCurrentPlayer());
    }
 
    public boolean wrongAnswer() {
