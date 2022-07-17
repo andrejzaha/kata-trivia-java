@@ -7,6 +7,7 @@ import java.util.List;
 // REFACTOR ME
 public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
+   private final PenaltyBox penaltyBox = new PenaltyBox();
    private LinkedList popQuestions = new LinkedList();
    private LinkedList scienceQuestions = new LinkedList();
    private LinkedList sportsQuestions = new LinkedList();
@@ -47,7 +48,7 @@ public class GameBetter implements IGame {
       System.out.println(getCurrentPlayer().getName() + " is the current player");
       System.out.println("They have rolled a " + roll);
 
-      if (getCurrentPlayer().isInPenaltyBox()) {
+      if (penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer())) {
          handleRollForPlayerInPenaltyBox(roll);
       } else {
          handleRollForPlayerWithoutPenalty(roll);
@@ -60,6 +61,7 @@ public class GameBetter implements IGame {
       printPenaltyBoxInteractionMessage(isGettingOutOfPenaltyBox);
 
       if (isGettingOutOfPenaltyBox) {
+         penaltyBox.releasePrisoner(getCurrentPlayer());
          handleRollForPlayerWithoutPenalty(roll);
       }
    }
@@ -116,7 +118,7 @@ public class GameBetter implements IGame {
    }
 
    public boolean wasCorrectlyAnswered() {
-      if (!getCurrentPlayer().isInPenaltyBox() || isGettingOutOfPenaltyBox) {
+      if (!penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer()) || isGettingOutOfPenaltyBox) {
          handleCurrentPlayerCorrectAnswer();
       }
       boolean shouldGameContinue = shouldGameContinue();
@@ -125,7 +127,7 @@ public class GameBetter implements IGame {
    }
 
    private boolean shouldGameContinue() {
-      if (getCurrentPlayer().isInPenaltyBox() && !isGettingOutOfPenaltyBox) {
+      if (penaltyBox.isGivenPlayerPrisoner(getCurrentPlayer()) && !isGettingOutOfPenaltyBox) {
          return true;
       }
       return isCurrentPlayerNotAWinner();
@@ -160,7 +162,7 @@ public class GameBetter implements IGame {
 
    private void sendCurrentPlayerToPenaltyBox() {
       System.out.println(getCurrentPlayer().getName() + " was sent to the penalty box");
-      getCurrentPlayer().moveToPenaltyBox();
+      penaltyBox.addPrisoner(getCurrentPlayer());
    }
 
    private Player getCurrentPlayer() {
