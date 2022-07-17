@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Player {
 
     private final String name;
-    private int place;
+    private Place place;
     private int purse;
 
     public Player(String name) {
@@ -16,16 +16,12 @@ public class Player {
         return name;
     }
 
-    public int getPlace() {
+    public Place getPlace() {
         return place;
     }
 
-    public void updatePlaceByRoll(int roll, int maxNbOfPlaces) {
-        int placeAfterRoll = place + roll;
-        if (placeAfterRoll > (maxNbOfPlaces - 1)) {
-            placeAfterRoll -= maxNbOfPlaces;
-        }
-        place = placeAfterRoll;
+    public void setPlace(Place place) {
+        this.place = place;
     }
 
     public int getPurse() {

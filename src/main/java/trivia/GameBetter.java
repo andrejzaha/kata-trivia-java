@@ -67,22 +67,22 @@ public class GameBetter implements IGame {
    private void handleRollForPlayerWithoutPenalty(int roll) {
       updateCurrentPlayerPlace(roll);
 
-      Category currentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
+      Category currentCategory = getCurrentPlayer().getPlace().getCategory();
       System.out.println("The category is " + currentCategory.getName());
 
       askQuestion();
    }
 
    private void updateCurrentPlayerPlace(int roll) {
-      getCurrentPlayer().updatePlaceByRoll(roll, 12);
+      gameBoard.movePlayer(getCurrentPlayer(), roll);
 
       System.out.println(getCurrentPlayer().getName()
                          + "'s new location is "
-                         + getCurrentPlayer().getPlace());
+                         + getCurrentPlayer().getPlace().getIndex());
    }
 
    private void askQuestion() {
-      Category currentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
+      Category currentCategory = getCurrentPlayer().getPlace().getCategory();
       System.out.println(currentCategory.consumeQuestion());
    }
 
