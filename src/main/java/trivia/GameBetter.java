@@ -2,13 +2,15 @@ package trivia;
 
 import java.util.*;
 
+import static java.util.Objects.isNull;
+
 // REFACTOR ME
 public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
    private final PenaltyBox penaltyBox = new PenaltyBox();
    private final GameBoard gameBoard;
 
-   private int currentPlayer = 0;
+   private Player currentPlayer;
 
    public GameBetter() {
       List<String> categoryNames = Arrays.asList("Pop", "Science", "Sports", "Rock");
@@ -135,12 +137,19 @@ public class GameBetter implements IGame {
    }
 
    private Player getCurrentPlayer() {
-      return players.get(currentPlayer);
+      if (isNull(currentPlayer)) {
+         return players.get(0);
+      }
+      return currentPlayer;
    }
 
    private void selectNextPlayer() {
-      currentPlayer++;
-      if (currentPlayer == players.size()) currentPlayer = 0;
+      if (isNull(currentPlayer)) {
+         currentPlayer = players.get(0);
+      }
+      int currentIndex = players.indexOf(currentPlayer);
+      int nextIndex = (currentIndex < players.size() - 1) ? currentIndex + 1 : 0;
+      currentPlayer = players.get(nextIndex);
    }
 
 }
