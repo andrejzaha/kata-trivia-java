@@ -1,31 +1,32 @@
 package trivia;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 // REFACTOR ME
 public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
    private final PenaltyBox penaltyBox = new PenaltyBox();
-   private LinkedList popQuestions = new LinkedList();
-   private LinkedList scienceQuestions = new LinkedList();
-   private LinkedList sportsQuestions = new LinkedList();
-   private LinkedList rockQuestions = new LinkedList();
+   private LinkedList popQuestions;
+   private LinkedList scienceQuestions;
+   private LinkedList sportsQuestions;
+   private LinkedList rockQuestions;
 
    private int currentPlayer = 0;
 
    public GameBetter() {
-      for (int i = 0; i < 50; i++) {
-         popQuestions.addLast("Pop Question " + i);
-         scienceQuestions.addLast(("Science Question " + i));
-         sportsQuestions.addLast(("Sports Question " + i));
-         rockQuestions.addLast(createRockQuestion(i));
-      }
+      popQuestions = (LinkedList) createCategoryQuestions("Pop");
+      scienceQuestions = (LinkedList) createCategoryQuestions("Science");
+      sportsQuestions = (LinkedList) createCategoryQuestions("Sports");
+      rockQuestions = (LinkedList) createCategoryQuestions("Rock");
+
    }
 
-   private String createRockQuestion(int index) {
-      return "Rock Question " + index;
+   private Deque<String> createCategoryQuestions(String name) {
+      return IntStream.range(0, 50)
+              .mapToObj(index -> name + " Question " + index)
+              .collect(Collectors.toCollection(LinkedList::new));
    }
 
    public boolean isPlayable() {

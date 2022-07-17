@@ -7,7 +7,6 @@ public class Player {
     private final String name;
     private int place;
     private int purse;
-    private boolean inPenaltyBox;
 
     public Player(String name) {
         this.name = name;
