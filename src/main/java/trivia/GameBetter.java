@@ -8,19 +8,15 @@ import java.util.stream.IntStream;
 public class GameBetter implements IGame {
    private final List<Player> players = new ArrayList<>();
    private final PenaltyBox penaltyBox = new PenaltyBox();
-   private LinkedList popQuestions;
-   private LinkedList scienceQuestions;
-   private LinkedList sportsQuestions;
-   private LinkedList rockQuestions;
+   private final Set<Category> categories;
 
    private int currentPlayer = 0;
 
    public GameBetter() {
-      popQuestions = (LinkedList) createCategoryQuestions("Pop");
-      scienceQuestions = (LinkedList) createCategoryQuestions("Science");
-      sportsQuestions = (LinkedList) createCategoryQuestions("Sports");
-      rockQuestions = (LinkedList) createCategoryQuestions("Rock");
-
+      List<String> categoryNames = Arrays.asList("Pop", "Science", "Sports", "Rock");
+      categories = categoryNames.stream()
+              .map(categoryName -> new Category(categoryName, createCategoryQuestions(categoryName)))
+              .collect(Collectors.toSet());
    }
 
    private Deque<String> createCategoryQuestions(String name) {
@@ -93,14 +89,16 @@ public class GameBetter implements IGame {
    }
 
    private void askQuestion() {
-      if (currentCategory() == "Pop")
-         System.out.println(popQuestions.removeFirst());
-      if (currentCategory() == "Science")
-         System.out.println(scienceQuestions.removeFirst());
-      if (currentCategory() == "Sports")
-         System.out.println(sportsQuestions.removeFirst());
-      if (currentCategory() == "Rock")
-         System.out.println(rockQuestions.removeFirst());
+      Optional<Category> maybeCurrentCategory = categories.stream()
+              .filter(category -> category.getName().equals(currentCategory()))
+              .findFirst();
+
+      if (maybeCurrentCategory.isEmpty()) {
+         return;
+      }
+
+      Category currentCategory = maybeCurrentCategory.get();
+      System.out.println(currentCategory.consumeQuestion());
    }
 
 
