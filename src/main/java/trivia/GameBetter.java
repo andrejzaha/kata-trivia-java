@@ -1,7 +1,6 @@
 package trivia;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 // REFACTOR ME
 public class GameBetter implements IGame {
@@ -67,7 +66,13 @@ public class GameBetter implements IGame {
 
    private void handleRollForPlayerWithoutPenalty(int roll) {
       updateCurrentPlayerPlace(roll);
-      System.out.println("The category is " + currentCategory());
+
+      Optional<Category> maybeCurrentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
+      if (maybeCurrentCategory.isEmpty()) {
+         return;
+      }
+
+      System.out.println("The category is " + maybeCurrentCategory.get().getName());
       askQuestion();
    }
 
@@ -80,27 +85,12 @@ public class GameBetter implements IGame {
    }
 
    private void askQuestion() {
-      Optional<Category> maybeCurrentCategory = gameBoard.getCategoryByName(currentCategory());
-
+      Optional<Category> maybeCurrentCategory = gameBoard.getCategoryByPlace(getCurrentPlayer().getPlace());
       if (maybeCurrentCategory.isEmpty()) {
          return;
       }
 
-      Category currentCategory = maybeCurrentCategory.get();
-      System.out.println(currentCategory.consumeQuestion());
-   }
-
-   private String currentCategory() {
-      if (getCurrentPlayer().getPlace() == 0) return "Pop";
-      if (getCurrentPlayer().getPlace() == 4) return "Pop";
-      if (getCurrentPlayer().getPlace() == 8) return "Pop";
-      if (getCurrentPlayer().getPlace() == 1) return "Science";
-      if (getCurrentPlayer().getPlace() == 5) return "Science";
-      if (getCurrentPlayer().getPlace() == 9) return "Science";
-      if (getCurrentPlayer().getPlace() == 2) return "Sports";
-      if (getCurrentPlayer().getPlace() == 6) return "Sports";
-      if (getCurrentPlayer().getPlace() == 10) return "Sports";
-      return "Rock";
+      System.out.println(maybeCurrentCategory.get().consumeQuestion());
    }
 
    public boolean wasCorrectlyAnswered() {
